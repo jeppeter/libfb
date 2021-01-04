@@ -1,7 +1,12 @@
 
 
-all:test
+all:lex.c
 
 
-test:test.tab.o
-	gcc -o $@ $^
+lex.c:lex.l
+	flex -o $@ $<
+
+
+
+clean:
+	rm -f lex.c
