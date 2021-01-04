@@ -33,15 +33,29 @@ SYMBOL {
 }
 
 
-.* { fprintf(stdout,"line [%s]\n", yytext); }
+.* { }
 
 
 %%
 
 int main(int argc,char* argv[])
 {
+	int i;
 	yylex();	
+	if (yytext) {
+		i = 0;
+		while(yytext[i] != '\0') {
+			i ++;
+		}
+
+		if (i > 0) {
+			if (yytext[i-1] != '\n') {
+				lex_lines ++;
+			}
+		} else {
+			lex_lines ++;
+		}
+	}
 	fprintf(stdout,"lines [%d]\n",lex_lines);
 	return 0;
 }
-
