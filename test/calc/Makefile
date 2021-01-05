@@ -4,13 +4,13 @@ all:calc
 
 
 calc:calc.tab.o lex.o
-	gcc -Wall -o $@ $^ -lfl
+	gcc -Wall -g -o $@ $^ -lfl
 
 %.o:%.c
-	gcc -Wall -c $< -o $@
+	gcc -Wall -g -c $< -o $@
 
 calc.tab.h calc.tab.c:calc.y
-	bison -d $<
+	bison  -d $<
 
 lex.c:lex.l calc.tab.h
 	flex -o $@ $<

@@ -13,11 +13,12 @@
 %token NUMBER
 
 %define api.value.type {double}
+%debug
 
 %%
 
-calclist : 
- |  expr { printf("%f\n", $1);}
+calclist :
+  expr { printf("%f\n", $1);}
 
 
 expr : 
@@ -25,7 +26,7 @@ expr :
  | term MINUS term { $$ = $1 - $3; }
 
 term:
-  | factor { $$ = $1; }
+  factor { $$ = $1; }
   | factor MULTIPLE factor { $$ = $1 * $3;}
   | factor DIVIDE factor { $$ = $1 / $3; }
 
@@ -38,6 +39,11 @@ factor:
 
 int main(int argc,char* argv[])
 {
+	yydebug = 1;
+	yyin = stdin;
+	if (argc > 1) {
+		yyin = fopen(argv[1],"r+");
+	}
 	yyparse();
 	return 0;
 }
@@ -46,7 +52,7 @@ void yyerror(char* fmt,...)
 {
 	va_list ap;
 	va_start(ap,fmt);
-	fprintf(stderr,"begin error [%d]\n",lines);
+	fprintf(stderr,"begin error [%d] YYDEBUG [%d]\n",lines, YYDEBUG);
 	vfprintf(stderr,fmt,ap);
 	fprintf(stderr,"end error\n");
 	return;

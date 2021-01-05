@@ -10,6 +10,7 @@ int yylex();
 void yyerror(char* fmt,...) ;
 extern char* yytext;
 extern int lines;
+extern FILE* yyin;
 
 #ifdef __cplusplus
 };
