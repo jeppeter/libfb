@@ -18,22 +18,25 @@
 %%
 
 calclist :
-  expr { printf("%f\n", $1);}
+  | calclist expr { printf("%f\n", $2);}
+  ;
 
 
-expr : 
- term PLUS term { $$ = $1 + $3; }
- | term MINUS term { $$ = $1 - $3; }
+expr : term { $$ = $1; YYDPRINTF((stderr,"expr %f\n", $$)); }
+ | expr PLUS term { $$ = $1 + $3; YYDPRINTF((stderr,"expr PLUS %f\n", $$)); }
+ | expr MINUS term { $$ = $1 - $3;  YYDPRINTF((stderr,"expr MINUS %f\n", $$));}
+;
 
 term:
-  factor { $$ = $1; }
-  | factor MULTIPLE factor { $$ = $1 * $3;}
-  | factor DIVIDE factor { $$ = $1 / $3; }
+  factor { $$ = $1;  YYDPRINTF((stderr,"term %f\n", $$)); }
+  | term MULTIPLE factor { $$ = $1 * $3; YYDPRINTF((stderr,"term MULTIPLE %f\n", $$));}
+  | term DIVIDE factor { $$ = $1 / $3;  YYDPRINTF((stderr,"term DIVIDE %f\n", $$));}
+;
 
 factor:
-  NUMBER { $$ = yylval; }
-  | LBRACE expr RBRACE { $$ = $2; }
-
+  NUMBER { $$ = yylval;  YYDPRINTF((stderr,"factor NUMBER %f\n", $$)); }
+  | LBRACE expr RBRACE { $$ = $2;  YYDPRINTF((stderr,"factor expr %f\n", $$));}
+;
 
 %%
 
